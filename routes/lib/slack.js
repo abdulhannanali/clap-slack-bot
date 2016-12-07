@@ -11,7 +11,6 @@ const fuseUser = new Fuse(usersCache, {
 		'name',
 		'username'
 	],
-	distance: 1000,
 	tokenize: true
 })
 
