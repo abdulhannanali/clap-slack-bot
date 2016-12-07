@@ -5,18 +5,26 @@ const CLAP_TEXT = ':clap: :clap: :clap: :partyparrot:'
 const REVERSE_CLAP_TEXT = CLAP_TEXT.split(' ').reverse().join(' ')
 
 const fuseUser = new Fuse(usersCache, {
-	include: 'matches',
+	include: ['matches'],
 	threshold: 0.6,
 	keys: [
 		'name',
 		'username'
 	],
-	distance: 1000
+	distance: 1000,
+	tokenize: true
 })
 
+function sanitizeText(text) {
+	return text.replace(/[\[\]\/\\\"\']/ig, " ")
+}
 
-function resolveUser (text) {
-	const searchMatch = fuseUser.search(text)
+function resolveUser (text = '') {
+	if (!text) {
+		return
+	}
+
+	const searchMatch = fuseUser.search(sanitizeText(text))
 
 	if (searchMatch && searchMatch[0]) {
 		return searchMatch[0].item.id
@@ -36,7 +44,6 @@ function respondClap (req, res, next) {
 	const text = req.body.text || ''
 	const userId = resolveUser(text)
 
-	console.log(userId)
 	if (userId) {
 		res.json({
 			text: clapReply(userId)
