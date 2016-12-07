@@ -16,7 +16,7 @@ const fuseUser = new Fuse(usersCache, {
 })
 
 function sanitizeText(text) {
-	return text.replace(/[\[\]\/\\\"\'\|<>]/ig, " ")
+	return text.replace(/[\[\]\/\\\"\'\|<>\*\.\@\(\)\~]/ig, " ")
 }
 
 function resolveUser (text = '') {
